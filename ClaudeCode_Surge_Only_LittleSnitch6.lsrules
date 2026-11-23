@@ -1,0 +1,38 @@
+{
+  "name": "Claude Code - Surge Fake-IP Only",
+  "description": "For signed Claude Code (Anthropic Team ID Q6L2SF6YDW): allow 198.18.0.0/15 and loopback; deny any other outgoing endpoint. Does not apply automatically to spawned helper programs. Review and test in Network Monitor; assumes Surge is intercepting Fake-IP or localhost proxy connections.",
+  "rules": [
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "notes": "Allow Surge enhanced-mode Fake-IP destination only, assuming Surge actually intercepts this traffic."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "notes": "Allow localhost IPv4 (including local Surge HTTP proxy)."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "notes": "Allow localhost IPv6 only."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "notes": "Default deny all other outbound destinations for signed Claude Code executable."
+    }
+  ]
+}
