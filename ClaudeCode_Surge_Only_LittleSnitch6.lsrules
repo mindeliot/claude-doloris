@@ -1,7 +1,295 @@
 {
-  "name": "Claude Code + Desktop + All Observed Helpers — Code ID and Path Deny",
-  "description": "Little Snitch 6; 23 rules: 16 Code ID rules for the 4 Anthropic identities observed via codesign (for each: allow Surge Fake-IP 198.18.0.0/15, IPv4 127.0.0.0/8, IPv6 ::1/128, deny other outgoing); plus 7 exact executable-path deny-any fallbacks for Claude Code installed via Homebrew Cask 2.1.323 and the 6 observed Claude Desktop executables including 4 Helpers and iOS Sim. PATH FALLBACKS: no address allow is added for paths; this is intentional to avoid granting additional access if another program is substituted at one of these paths. With same regular priority, Code ID address-specific allow outranks path deny-any. A path deny will only protect an altered binary if its process identification still matches: inspect whether Little Snitch enables a path code-identity check. .lsrules does not document setting the path identity-check mode. Paths are exact, NOT recursive and NOT upgrade-stable. No homebrew symlink path (/opt/homebrew/bin/claude) because it was marked ineffective in Little Snitch. Remote subscription may disable new allow rules. Check all enabled and applied, including process-via-helper attribution, in Network Monitor. Demo Mode and external helper subprocesses remain risks.",
+  "name": "Claude Code + Desktop + Audited Helpers — Surge-Only (98 rules)",
+  "description": "Built from the user-provided claude-signatures.txt audit. 26 signed Mach-O files checked (1 Claude CLI + 1 desktop main + 24 additional), excluding four framework library binaries as standalone network processes: Electron Framework, ReactiveObjC, Squirrel, Mantle. Includes 19 signed Code IDs (four network rules each: 198.18.0.0/15 Allow; 127.0.0.0/8 Allow; ::1/128 Allow; all other outgoing Deny), plus 22 exact executable path Deny Any rules as fallback. Total 98. All normal priority. Does not match an arbitrary directory wildcard, external child executables such as git/curl/node, or future new identities. Ensure remote-group Allow rules are actually enabled, inspect process identities and any competing rule, verify Network Monitor behavior, and use a fully licensed Little Snitch for sustained filtering. Path matching may retain a code identity check depending on UI; inspect imported rules. Surge Fake-IP allows are only meaningful when Surge is actively intercepting the destination range. Libraries were intentionally omitted.",
   "rules": [
+    {
+      "process": "identifier.Q6L2SF6YDW/ShipIt",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (ShipIt); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/ShipIt. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/ShipIt",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (ShipIt); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/ShipIt. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/ShipIt",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (ShipIt); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/ShipIt. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/ShipIt",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (ShipIt); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/ShipIt. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/SimulatorFrameworkBridge-iOS",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (SimulatorFrameworkBridge-iOS); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/Resources/SimulatorFrameworkBridge-iOS. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/SimulatorFrameworkBridge-iOS",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (SimulatorFrameworkBridge-iOS); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/Resources/SimulatorFrameworkBridge-iOS. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/SimulatorFrameworkBridge-iOS",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (SimulatorFrameworkBridge-iOS); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/Resources/SimulatorFrameworkBridge-iOS. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/SimulatorFrameworkBridge-iOS",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (SimulatorFrameworkBridge-iOS); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/Resources/SimulatorFrameworkBridge-iOS. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/alt-tool-runner",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (alt-tool-runner); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/alt-tool-runner. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/alt-tool-runner",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (alt-tool-runner); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/alt-tool-runner. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/alt-tool-runner",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (alt-tool-runner); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/alt-tool-runner. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/alt-tool-runner",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (alt-tool-runner); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/alt-tool-runner. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/app-cu-helper",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (app-cu-helper); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/app-cu-helper. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/app-cu-helper",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (app-cu-helper); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/app-cu-helper. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/app-cu-helper",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (app-cu-helper); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/app-cu-helper. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/app-cu-helper",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (app-cu-helper); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/app-cu-helper. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/app_shim_loader",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (app_shim_loader); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/app_shim_loader. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/app_shim_loader",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (app_shim_loader); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/app_shim_loader. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/app_shim_loader",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (app_shim_loader); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/app_shim_loader. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/app_shim_loader",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (app_shim_loader); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/app_shim_loader. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/chrome-native-host",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (chrome-native-host); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/chrome-native-host. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/chrome-native-host",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (chrome-native-host); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/chrome-native-host. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/chrome-native-host",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (chrome-native-host); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/chrome-native-host. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/chrome-native-host",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (chrome-native-host); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/chrome-native-host. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/chrome_crashpad_handler",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (chrome_crashpad_handler); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/chrome_crashpad_handler. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/chrome_crashpad_handler",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (chrome_crashpad_handler); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/chrome_crashpad_handler. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/chrome_crashpad_handler",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (chrome_crashpad_handler); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/chrome_crashpad_handler. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/chrome_crashpad_handler",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (chrome_crashpad_handler); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/chrome_crashpad_handler. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/claude-ssh-askpass",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (claude-ssh-askpass); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/claude-ssh-askpass. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/claude-ssh-askpass",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (claude-ssh-askpass); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/claude-ssh-askpass. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/claude-ssh-askpass",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (claude-ssh-askpass); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/claude-ssh-askpass. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/claude-ssh-askpass",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (claude-ssh-askpass); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/claude-ssh-askpass. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
       "action": "allow",
@@ -37,78 +325,6 @@
       "priority": "regular",
       "disabled": false,
       "notes": "Claude Code CLI | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; observed executable under /opt/homebrew/Caskroom/claude-code/2.1.323/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
-    },
-    {
-      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "198.18.0.0/15",
-      "priority": "regular",
-      "disabled": false,
-      "notes": "Claude Desktop | Surge Fake-IP pool; only appropriate when Surge actually intercepts that range. Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
-    },
-    {
-      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "127.0.0.0/8",
-      "priority": "regular",
-      "disabled": false,
-      "notes": "Claude Desktop | IPv4 loopback (permits any local listener). Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
-    },
-    {
-      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "::1/128",
-      "priority": "regular",
-      "disabled": false,
-      "notes": "Claude Desktop | IPv6 loopback only. Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
-    },
-    {
-      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
-      "action": "deny",
-      "direction": "outgoing",
-      "remote": "any",
-      "priority": "regular",
-      "disabled": false,
-      "notes": "Claude Desktop | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
-    },
-    {
-      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "198.18.0.0/15",
-      "priority": "regular",
-      "disabled": false,
-      "notes": "Claude Desktop Helpers | Surge Fake-IP pool; only appropriate when Surge actually intercepts that range. Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
-    },
-    {
-      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "127.0.0.0/8",
-      "priority": "regular",
-      "disabled": false,
-      "notes": "Claude Desktop Helpers | IPv4 loopback (permits any local listener). Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
-    },
-    {
-      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "::1/128",
-      "priority": "regular",
-      "disabled": false,
-      "notes": "Claude Desktop Helpers | IPv6 loopback only. Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
-    },
-    {
-      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
-      "action": "deny",
-      "direction": "outgoing",
-      "remote": "any",
-      "priority": "regular",
-      "disabled": false,
-      "notes": "Claude Desktop Helpers | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claude.ios-sim",
@@ -147,31 +363,328 @@
       "notes": "Claude iOS Sim | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claude.ios-sim (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/MacOS/claude-ios-sim. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
-      "process": "/opt/homebrew/Caskroom/claude-code/2.1.323/claude",
-      "action": "deny",
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
+      "action": "allow",
       "direction": "outgoing",
-      "remote": "any",
+      "remote-addresses": "198.18.0.0/15",
       "priority": "regular",
       "disabled": false,
-      "notes": "PATH FALLBACK, DENY ONLY — Claude Code CLI — Homebrew Cask executable (confirmed 2.1.323). Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claude-code. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+      "notes": "Claude Desktop | Surge Fake-IP pool; only appropriate when Surge actually intercepts that range. Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
-      "process": "/Applications/Claude.app/Contents/MacOS/Claude",
-      "action": "deny",
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
+      "action": "allow",
       "direction": "outgoing",
-      "remote": "any",
+      "remote-addresses": "127.0.0.0/8",
       "priority": "regular",
       "disabled": false,
-      "notes": "PATH FALLBACK, DENY ONLY — Claude Desktop — main executable. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claudefordesktop. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+      "notes": "Claude Desktop | IPv4 loopback (permits any local listener). Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper",
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Claude Desktop | IPv6 loopback only. Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
       "action": "deny",
       "direction": "outgoing",
       "remote": "any",
       "priority": "regular",
       "disabled": false,
-      "notes": "PATH FALLBACK, DENY ONLY — Claude Helper — normal. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claudefordesktop.helper. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+      "notes": "Claude Desktop | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.artifact-app-installer",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (com.anthropic.claudefordesktop.artifact-app-installer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/artifact-app-installer. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.artifact-app-installer",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (com.anthropic.claudefordesktop.artifact-app-installer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/artifact-app-installer. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.artifact-app-installer",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (com.anthropic.claudefordesktop.artifact-app-installer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/artifact-app-installer. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.artifact-app-installer",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (com.anthropic.claudefordesktop.artifact-app-installer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/artifact-app-installer. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.artifact-app-notifier",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (com.anthropic.claudefordesktop.artifact-app-notifier); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/artifact-app-notifier. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.artifact-app-notifier",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (com.anthropic.claudefordesktop.artifact-app-notifier); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/artifact-app-notifier. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.artifact-app-notifier",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (com.anthropic.claudefordesktop.artifact-app-notifier); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/artifact-app-notifier. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.artifact-app-notifier",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (com.anthropic.claudefordesktop.artifact-app-notifier); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/artifact-app-notifier. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Claude Desktop Helpers | Surge Fake-IP pool; only appropriate when Surge actually intercepts that range. Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Claude Desktop Helpers | IPv4 loopback (permits any local listener). Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Claude Desktop Helpers | IPv6 loopback only. Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Claude Desktop Helpers | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/disclaimer",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (disclaimer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/disclaimer. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/disclaimer",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (disclaimer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/disclaimer. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/disclaimer",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (disclaimer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/disclaimer. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/disclaimer",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (disclaimer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/disclaimer. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/github-mcp-server",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (github-mcp-server); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Resources/app.asar.unpacked/resources/github-mcp/github-mcp-server. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/github-mcp-server",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (github-mcp-server); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Resources/app.asar.unpacked/resources/github-mcp/github-mcp-server. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/github-mcp-server",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (github-mcp-server); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Resources/app.asar.unpacked/resources/github-mcp/github-mcp-server. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/github-mcp-server",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (github-mcp-server); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Resources/app.asar.unpacked/resources/github-mcp/github-mcp-server. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/permission-fixer",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (permission-fixer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/permission-fixer. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/permission-fixer",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (permission-fixer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/permission-fixer. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/permission-fixer",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (permission-fixer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/permission-fixer. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/permission-fixer",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (permission-fixer); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/permission-fixer. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/post-update-check",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (post-update-check); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/post-update-check. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/post-update-check",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (post-update-check); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/post-update-check. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/post-update-check",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (post-update-check); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/post-update-check. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/post-update-check",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (post-update-check); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Helpers/post-update-check. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/spawn-helper",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "198.18.0.0/15",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (spawn-helper); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Resources/app.asar.unpacked/node_modules/node-pty/build/Release/spawn-helper. Codesign identity matching survives path changes if unchanged. Allow: Surge Fake-IP range; only useful with a verified active Surge interception path."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/spawn-helper",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "127.0.0.0/8",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (spawn-helper); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Resources/app.asar.unpacked/node_modules/node-pty/build/Release/spawn-helper. Codesign identity matching survives path changes if unchanged. Allow: IPv4 loopback; connects to all locally listening services."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/spawn-helper",
+      "action": "allow",
+      "direction": "outgoing",
+      "remote-addresses": "::1/128",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (spawn-helper); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Resources/app.asar.unpacked/node_modules/node-pty/build/Release/spawn-helper. Codesign identity matching survives path changes if unchanged. Allow: IPv6 localhost loopback."
+    },
+    {
+      "process": "identifier.Q6L2SF6YDW/spawn-helper",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Audited bundled helper (spawn-helper); code signature verified PASS with Q6L2SF6YDW. File: /Applications/Claude.app/Contents/Resources/app.asar.unpacked/node_modules/node-pty/build/Release/spawn-helper. Codesign identity matching survives path changes if unchanged. Deny all other destinations; check for a competing high-priority Allow."
     },
     {
       "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (GPU).app/Contents/MacOS/Claude Helper (GPU)",
@@ -201,6 +714,42 @@
       "notes": "PATH FALLBACK, DENY ONLY — Claude Helper — Renderer. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claudefordesktop.helper. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
     },
     {
+      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "PATH FALLBACK, DENY ONLY — Claude Helper — normal. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claudefordesktop.helper. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/app_shim_loader",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary app_shim_loader. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Helpers/chrome_crashpad_handler",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary chrome_crashpad_handler. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Frameworks/Squirrel.framework/Versions/A/Resources/ShipIt",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary ShipIt. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
       "process": "/Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/MacOS/claude-ios-sim",
       "action": "deny",
       "direction": "outgoing",
@@ -208,6 +757,132 @@
       "priority": "regular",
       "disabled": false,
       "notes": "PATH FALLBACK, DENY ONLY — Claude iOS Sim — helper. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claude.ios-sim. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/Resources/SimulatorFrameworkBridge-iOS",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary SimulatorFrameworkBridge-iOS. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Helpers/alt-tool-runner",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary alt-tool-runner. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Helpers/app-cu-helper",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary app-cu-helper. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Helpers/artifact-app-installer",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary com.anthropic.claudefordesktop.artifact-app-installer. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Helpers/artifact-app-notifier",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary com.anthropic.claudefordesktop.artifact-app-notifier. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Helpers/chrome-native-host",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary chrome-native-host. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Helpers/claude-ssh-askpass",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary claude-ssh-askpass. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Helpers/disclaimer",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary disclaimer. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Helpers/permission-fixer",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary permission-fixer. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Helpers/post-update-check",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary post-update-check. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/MacOS/Claude",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "PATH FALLBACK, DENY ONLY — Claude Desktop — main executable. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claudefordesktop. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Resources/app.asar.unpacked/node_modules/node-pty/build/Release/spawn-helper",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary spawn-helper. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Resources/app.asar.unpacked/resources/github-mcp/github-mcp-server",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "Path fallback only for audited binary github-mcp-server. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
+    },
+    {
+      "process": "/opt/homebrew/Caskroom/claude-code/2.1.323/claude",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "PATH FALLBACK, DENY ONLY — Claude Code CLI — Homebrew Cask executable (confirmed 2.1.323). Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claude-code. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
     }
   ]
 }
