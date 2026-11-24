@@ -1,6 +1,6 @@
 {
-  "name": "Claude Code + Claude Desktop | Surge Fake-IP Only",
-  "description": "Apple Silicon Homebrew Claude Code (observed 2.1.323) and /Applications/Claude.app. Signature rules plus exact executable-path rules for CLI, Desktop and common Electron helpers. Allows only Surge Fake-IP 198.18.0.0/15 and loopback 127.0.0.0/8, ::1/128; denies any other outgoing endpoint. Path rules for CLI may become stale on upgrade; code-ID rules remain if signatures stay the same. Little Snitch 6 uses HTTPS remote rule-group subscriptions, not direct local .lsrules import. Check for overrides and actual traffic, including helper programs, in Network Monitor. This is not a guaranteed whole-system kill switch.",
+  "name": "Claude Code + Desktop + Helpers — Surge Only (Verified Code IDs)",
+  "description": "16 Little Snitch 6 rules for 4 signer identities verified from local codesign output: Claude Code CLI; Desktop; shared Desktop Helpers (regular/GPU/Plugin/Renderer); Desktop iOS Sim. Per identity allow 198.18.0.0/15, 127.0.0.0/8, ::1/128; deny other outgoing destinations. No wildcard paths. Remote subscription may disable new Allow rules despite disabled:false. Must check Network Monitor and rule precedence; cannot cover different-code-ID or unsigned external subprocesses. Little Snitch demo/inactive filter is not reliable protection.",
   "rules": [
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
@@ -8,7 +8,8 @@
       "direction": "outgoing",
       "remote-addresses": "198.18.0.0/15",
       "priority": "regular",
-      "notes": "Claude Code CLI — code signature. Allow Surge Fake-IP pool only when its virtual-network interception is active. Verified on this Mac; survives Homebrew version changes if signing identity is unchanged."
+      "disabled": false,
+      "notes": "Claude Code CLI | Surge Fake-IP pool; only appropriate when Surge actually intercepts that range. Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; observed executable under /opt/homebrew/Caskroom/claude-code/2.1.323/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
@@ -16,7 +17,8 @@
       "direction": "outgoing",
       "remote-addresses": "127.0.0.0/8",
       "priority": "regular",
-      "notes": "Claude Code CLI — code signature. Allow IPv4 loopback; any local service could receive this traffic. Verified on this Mac; survives Homebrew version changes if signing identity is unchanged."
+      "disabled": false,
+      "notes": "Claude Code CLI | IPv4 loopback (permits any local listener). Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; observed executable under /opt/homebrew/Caskroom/claude-code/2.1.323/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
@@ -24,7 +26,8 @@
       "direction": "outgoing",
       "remote-addresses": "::1/128",
       "priority": "regular",
-      "notes": "Claude Code CLI — code signature. Allow IPv6 loopback only. Verified on this Mac; survives Homebrew version changes if signing identity is unchanged."
+      "disabled": false,
+      "notes": "Claude Code CLI | IPv6 loopback only. Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; observed executable under /opt/homebrew/Caskroom/claude-code/2.1.323/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
@@ -32,71 +35,8 @@
       "direction": "outgoing",
       "remote": "any",
       "priority": "regular",
-      "notes": "Claude Code CLI — code signature. Deny any other outgoing endpoint, including direct public IPv4 and IPv6 connections. Verified on this Mac; survives Homebrew version changes if signing identity is unchanged."
-    },
-    {
-      "process": "/opt/homebrew/Caskroom/claude-code/2.1.323/claude",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "198.18.0.0/15",
-      "priority": "regular",
-      "notes": "Claude Code CLI — real Homebrew Caskroom executable (v2.1.323). Allow Surge Fake-IP pool only when its virtual-network interception is active. Real path reported on this Mac; versioned path may change after brew upgrade."
-    },
-    {
-      "process": "/opt/homebrew/Caskroom/claude-code/2.1.323/claude",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "127.0.0.0/8",
-      "priority": "regular",
-      "notes": "Claude Code CLI — real Homebrew Caskroom executable (v2.1.323). Allow IPv4 loopback; any local service could receive this traffic. Real path reported on this Mac; versioned path may change after brew upgrade."
-    },
-    {
-      "process": "/opt/homebrew/Caskroom/claude-code/2.1.323/claude",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "::1/128",
-      "priority": "regular",
-      "notes": "Claude Code CLI — real Homebrew Caskroom executable (v2.1.323). Allow IPv6 loopback only. Real path reported on this Mac; versioned path may change after brew upgrade."
-    },
-    {
-      "process": "/opt/homebrew/Caskroom/claude-code/2.1.323/claude",
-      "action": "deny",
-      "direction": "outgoing",
-      "remote": "any",
-      "priority": "regular",
-      "notes": "Claude Code CLI — real Homebrew Caskroom executable (v2.1.323). Deny any other outgoing endpoint, including direct public IPv4 and IPv6 connections. Real path reported on this Mac; versioned path may change after brew upgrade."
-    },
-    {
-      "process": "/opt/homebrew/bin/claude",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "198.18.0.0/15",
-      "priority": "regular",
-      "notes": "Claude Code CLI — Homebrew symlink. Allow Surge Fake-IP pool only when its virtual-network interception is active. Stable Homebrew command symlink; may not be the executable path used for connection attribution."
-    },
-    {
-      "process": "/opt/homebrew/bin/claude",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "127.0.0.0/8",
-      "priority": "regular",
-      "notes": "Claude Code CLI — Homebrew symlink. Allow IPv4 loopback; any local service could receive this traffic. Stable Homebrew command symlink; may not be the executable path used for connection attribution."
-    },
-    {
-      "process": "/opt/homebrew/bin/claude",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "::1/128",
-      "priority": "regular",
-      "notes": "Claude Code CLI — Homebrew symlink. Allow IPv6 loopback only. Stable Homebrew command symlink; may not be the executable path used for connection attribution."
-    },
-    {
-      "process": "/opt/homebrew/bin/claude",
-      "action": "deny",
-      "direction": "outgoing",
-      "remote": "any",
-      "priority": "regular",
-      "notes": "Claude Code CLI — Homebrew symlink. Deny any other outgoing endpoint, including direct public IPv4 and IPv6 connections. Stable Homebrew command symlink; may not be the executable path used for connection attribution."
+      "disabled": false,
+      "notes": "Claude Code CLI | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; observed executable under /opt/homebrew/Caskroom/claude-code/2.1.323/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
@@ -104,7 +44,8 @@
       "direction": "outgoing",
       "remote-addresses": "198.18.0.0/15",
       "priority": "regular",
-      "notes": "Claude Desktop — code signature. Allow Surge Fake-IP pool only when its virtual-network interception is active. Anthropic Desktop signed code identity; does not necessarily cover every independent helper."
+      "disabled": false,
+      "notes": "Claude Desktop | Surge Fake-IP pool; only appropriate when Surge actually intercepts that range. Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
@@ -112,7 +53,8 @@
       "direction": "outgoing",
       "remote-addresses": "127.0.0.0/8",
       "priority": "regular",
-      "notes": "Claude Desktop — code signature. Allow IPv4 loopback; any local service could receive this traffic. Anthropic Desktop signed code identity; does not necessarily cover every independent helper."
+      "disabled": false,
+      "notes": "Claude Desktop | IPv4 loopback (permits any local listener). Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
@@ -120,7 +62,8 @@
       "direction": "outgoing",
       "remote-addresses": "::1/128",
       "priority": "regular",
-      "notes": "Claude Desktop — code signature. Allow IPv6 loopback only. Anthropic Desktop signed code identity; does not necessarily cover every independent helper."
+      "disabled": false,
+      "notes": "Claude Desktop | IPv6 loopback only. Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop",
@@ -128,199 +71,80 @@
       "direction": "outgoing",
       "remote": "any",
       "priority": "regular",
-      "notes": "Claude Desktop — code signature. Deny any other outgoing endpoint, including direct public IPv4 and IPv6 connections. Anthropic Desktop signed code identity; does not necessarily cover every independent helper."
+      "disabled": false,
+      "notes": "Claude Desktop | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claudefordesktop (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/MacOS/Claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
-      "process": "/Applications/Claude.app/Contents/MacOS/Claude",
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
       "action": "allow",
       "direction": "outgoing",
       "remote-addresses": "198.18.0.0/15",
       "priority": "regular",
-      "notes": "Claude Desktop — main executable. Allow Surge Fake-IP pool only when its virtual-network interception is active. Standard system-wide app installation path, including Homebrew cask claude."
+      "disabled": false,
+      "notes": "Claude Desktop Helpers | Surge Fake-IP pool; only appropriate when Surge actually intercepts that range. Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
-      "process": "/Applications/Claude.app/Contents/MacOS/Claude",
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
       "action": "allow",
       "direction": "outgoing",
       "remote-addresses": "127.0.0.0/8",
       "priority": "regular",
-      "notes": "Claude Desktop — main executable. Allow IPv4 loopback; any local service could receive this traffic. Standard system-wide app installation path, including Homebrew cask claude."
+      "disabled": false,
+      "notes": "Claude Desktop Helpers | IPv4 loopback (permits any local listener). Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
-      "process": "/Applications/Claude.app/Contents/MacOS/Claude",
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
       "action": "allow",
       "direction": "outgoing",
       "remote-addresses": "::1/128",
       "priority": "regular",
-      "notes": "Claude Desktop — main executable. Allow IPv6 loopback only. Standard system-wide app installation path, including Homebrew cask claude."
+      "disabled": false,
+      "notes": "Claude Desktop Helpers | IPv6 loopback only. Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
-      "process": "/Applications/Claude.app/Contents/MacOS/Claude",
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claudefordesktop.helper",
       "action": "deny",
       "direction": "outgoing",
       "remote": "any",
       "priority": "regular",
-      "notes": "Claude Desktop — main executable. Deny any other outgoing endpoint, including direct public IPv4 and IPv6 connections. Standard system-wide app installation path, including Homebrew cask claude."
+      "disabled": false,
+      "notes": "Claude Desktop Helpers | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claudefordesktop.helper (Q6L2SF6YDW). Example executable(s): Covers observed Claude Helper, Claude Helper (GPU), Claude Helper (Plugin), Claude Helper (Renderer); all have the same Code ID. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper",
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claude.ios-sim",
       "action": "allow",
       "direction": "outgoing",
       "remote-addresses": "198.18.0.0/15",
       "priority": "regular",
-      "notes": "Claude Desktop — network/helper process. Allow Surge Fake-IP pool only when its virtual-network interception is active. Common Electron network utility helper; exact existence depends on desktop release."
+      "disabled": false,
+      "notes": "Claude iOS Sim | Surge Fake-IP pool; only appropriate when Surge actually intercepts that range. Observed identity: com.anthropic.claude.ios-sim (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/MacOS/claude-ios-sim. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper",
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claude.ios-sim",
       "action": "allow",
       "direction": "outgoing",
       "remote-addresses": "127.0.0.0/8",
       "priority": "regular",
-      "notes": "Claude Desktop — network/helper process. Allow IPv4 loopback; any local service could receive this traffic. Common Electron network utility helper; exact existence depends on desktop release."
+      "disabled": false,
+      "notes": "Claude iOS Sim | IPv4 loopback (permits any local listener). Observed identity: com.anthropic.claude.ios-sim (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/MacOS/claude-ios-sim. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper",
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claude.ios-sim",
       "action": "allow",
       "direction": "outgoing",
       "remote-addresses": "::1/128",
       "priority": "regular",
-      "notes": "Claude Desktop — network/helper process. Allow IPv6 loopback only. Common Electron network utility helper; exact existence depends on desktop release."
+      "disabled": false,
+      "notes": "Claude iOS Sim | IPv6 loopback only. Observed identity: com.anthropic.claude.ios-sim (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/MacOS/claude-ios-sim. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper",
+      "process": "identifier.Q6L2SF6YDW/com.anthropic.claude.ios-sim",
       "action": "deny",
       "direction": "outgoing",
       "remote": "any",
       "priority": "regular",
-      "notes": "Claude Desktop — network/helper process. Deny any other outgoing endpoint, including direct public IPv4 and IPv6 connections. Common Electron network utility helper; exact existence depends on desktop release."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "198.18.0.0/15",
-      "priority": "regular",
-      "notes": "Claude Desktop — Renderer helper. Allow Surge Fake-IP pool only when its virtual-network interception is active. Common Electron renderer executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "127.0.0.0/8",
-      "priority": "regular",
-      "notes": "Claude Desktop — Renderer helper. Allow IPv4 loopback; any local service could receive this traffic. Common Electron renderer executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "::1/128",
-      "priority": "regular",
-      "notes": "Claude Desktop — Renderer helper. Allow IPv6 loopback only. Common Electron renderer executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)",
-      "action": "deny",
-      "direction": "outgoing",
-      "remote": "any",
-      "priority": "regular",
-      "notes": "Claude Desktop — Renderer helper. Deny any other outgoing endpoint, including direct public IPv4 and IPv6 connections. Common Electron renderer executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (GPU).app/Contents/MacOS/Claude Helper (GPU)",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "198.18.0.0/15",
-      "priority": "regular",
-      "notes": "Claude Desktop — GPU helper. Allow Surge Fake-IP pool only when its virtual-network interception is active. Common Electron GPU helper executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (GPU).app/Contents/MacOS/Claude Helper (GPU)",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "127.0.0.0/8",
-      "priority": "regular",
-      "notes": "Claude Desktop — GPU helper. Allow IPv4 loopback; any local service could receive this traffic. Common Electron GPU helper executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (GPU).app/Contents/MacOS/Claude Helper (GPU)",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "::1/128",
-      "priority": "regular",
-      "notes": "Claude Desktop — GPU helper. Allow IPv6 loopback only. Common Electron GPU helper executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (GPU).app/Contents/MacOS/Claude Helper (GPU)",
-      "action": "deny",
-      "direction": "outgoing",
-      "remote": "any",
-      "priority": "regular",
-      "notes": "Claude Desktop — GPU helper. Deny any other outgoing endpoint, including direct public IPv4 and IPv6 connections. Common Electron GPU helper executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (Plugin).app/Contents/MacOS/Claude Helper (Plugin)",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "198.18.0.0/15",
-      "priority": "regular",
-      "notes": "Claude Desktop — Plugin helper. Allow Surge Fake-IP pool only when its virtual-network interception is active. Common Electron plugin helper executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (Plugin).app/Contents/MacOS/Claude Helper (Plugin)",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "127.0.0.0/8",
-      "priority": "regular",
-      "notes": "Claude Desktop — Plugin helper. Allow IPv4 loopback; any local service could receive this traffic. Common Electron plugin helper executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (Plugin).app/Contents/MacOS/Claude Helper (Plugin)",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "::1/128",
-      "priority": "regular",
-      "notes": "Claude Desktop — Plugin helper. Allow IPv6 loopback only. Common Electron plugin helper executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (Plugin).app/Contents/MacOS/Claude Helper (Plugin)",
-      "action": "deny",
-      "direction": "outgoing",
-      "remote": "any",
-      "priority": "regular",
-      "notes": "Claude Desktop — Plugin helper. Deny any other outgoing endpoint, including direct public IPv4 and IPv6 connections. Common Electron plugin helper executable."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Helpers/chrome_crashpad_handler",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "198.18.0.0/15",
-      "priority": "regular",
-      "notes": "Claude Desktop — crash handler. Allow Surge Fake-IP pool only when its virtual-network interception is active. Common Electron crash-report handler executable; verify locally before assuming it exists."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Helpers/chrome_crashpad_handler",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "127.0.0.0/8",
-      "priority": "regular",
-      "notes": "Claude Desktop — crash handler. Allow IPv4 loopback; any local service could receive this traffic. Common Electron crash-report handler executable; verify locally before assuming it exists."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Helpers/chrome_crashpad_handler",
-      "action": "allow",
-      "direction": "outgoing",
-      "remote-addresses": "::1/128",
-      "priority": "regular",
-      "notes": "Claude Desktop — crash handler. Allow IPv6 loopback only. Common Electron crash-report handler executable; verify locally before assuming it exists."
-    },
-    {
-      "process": "/Applications/Claude.app/Contents/Frameworks/Electron Framework.framework/Helpers/chrome_crashpad_handler",
-      "action": "deny",
-      "direction": "outgoing",
-      "remote": "any",
-      "priority": "regular",
-      "notes": "Claude Desktop — crash handler. Deny any other outgoing endpoint, including direct public IPv4 and IPv6 connections. Common Electron crash-report handler executable; verify locally before assuming it exists."
+      "disabled": false,
+      "notes": "Claude iOS Sim | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claude.ios-sim (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/MacOS/claude-ios-sim. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     }
   ]
 }
