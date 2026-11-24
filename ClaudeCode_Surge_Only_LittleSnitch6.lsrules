@@ -1,6 +1,6 @@
 {
-  "name": "Claude Code + Desktop + Helpers — Surge Only (Verified Code IDs)",
-  "description": "16 Little Snitch 6 rules for 4 signer identities verified from local codesign output: Claude Code CLI; Desktop; shared Desktop Helpers (regular/GPU/Plugin/Renderer); Desktop iOS Sim. Per identity allow 198.18.0.0/15, 127.0.0.0/8, ::1/128; deny other outgoing destinations. No wildcard paths. Remote subscription may disable new Allow rules despite disabled:false. Must check Network Monitor and rule precedence; cannot cover different-code-ID or unsigned external subprocesses. Little Snitch demo/inactive filter is not reliable protection.",
+  "name": "Claude Code + Desktop + All Observed Helpers — Code ID and Path Deny",
+  "description": "Little Snitch 6; 23 rules: 16 Code ID rules for the 4 Anthropic identities observed via codesign (for each: allow Surge Fake-IP 198.18.0.0/15, IPv4 127.0.0.0/8, IPv6 ::1/128, deny other outgoing); plus 7 exact executable-path deny-any fallbacks for Claude Code installed via Homebrew Cask 2.1.323 and the 6 observed Claude Desktop executables including 4 Helpers and iOS Sim. PATH FALLBACKS: no address allow is added for paths; this is intentional to avoid granting additional access if another program is substituted at one of these paths. With same regular priority, Code ID address-specific allow outranks path deny-any. A path deny will only protect an altered binary if its process identification still matches: inspect whether Little Snitch enables a path code-identity check. .lsrules does not document setting the path identity-check mode. Paths are exact, NOT recursive and NOT upgrade-stable. No homebrew symlink path (/opt/homebrew/bin/claude) because it was marked ineffective in Little Snitch. Remote subscription may disable new allow rules. Check all enabled and applied, including process-via-helper attribution, in Network Monitor. Demo Mode and external helper subprocesses remain risks.",
   "rules": [
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
@@ -145,6 +145,69 @@
       "priority": "regular",
       "disabled": false,
       "notes": "Claude iOS Sim | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claude.ios-sim (Q6L2SF6YDW). Example executable(s): /Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/MacOS/claude-ios-sim. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
+    },
+    {
+      "process": "/opt/homebrew/Caskroom/claude-code/2.1.323/claude",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "PATH FALLBACK, DENY ONLY — Claude Code CLI — Homebrew Cask executable (confirmed 2.1.323). Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claude-code. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/MacOS/Claude",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "PATH FALLBACK, DENY ONLY — Claude Desktop — main executable. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claudefordesktop. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "PATH FALLBACK, DENY ONLY — Claude Helper — normal. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claudefordesktop.helper. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (GPU).app/Contents/MacOS/Claude Helper (GPU)",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "PATH FALLBACK, DENY ONLY — Claude Helper — GPU. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claudefordesktop.helper. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (Plugin).app/Contents/MacOS/Claude Helper (Plugin)",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "PATH FALLBACK, DENY ONLY — Claude Helper — Plugin. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claudefordesktop.helper. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Frameworks/Claude Helper (Renderer).app/Contents/MacOS/Claude Helper (Renderer)",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "PATH FALLBACK, DENY ONLY — Claude Helper — Renderer. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claudefordesktop.helper. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+    },
+    {
+      "process": "/Applications/Claude.app/Contents/Helpers/Claude iOS Sim.app/Contents/MacOS/claude-ios-sim",
+      "action": "deny",
+      "direction": "outgoing",
+      "remote": "any",
+      "priority": "regular",
+      "disabled": false,
+      "notes": "PATH FALLBACK, DENY ONLY — Claude iOS Sim — helper. Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claude.ios-sim. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
     }
   ]
 }
