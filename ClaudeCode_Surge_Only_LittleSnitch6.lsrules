@@ -297,7 +297,7 @@
       "remote-addresses": "198.18.0.0/15",
       "priority": "regular",
       "disabled": false,
-      "notes": "Claude Code CLI | Surge Fake-IP pool; only appropriate when Surge actually intercepts that range. Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; observed executable under /opt/homebrew/Caskroom/claude-code/2.1.323/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
+      "notes": "Claude Code CLI | Surge Fake-IP pool; only appropriate when Surge actually intercepts that range. Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; expected executable (2.1.325) under /opt/homebrew/Caskroom/claude-code/2.1.325/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
@@ -306,7 +306,7 @@
       "remote-addresses": "127.0.0.0/8",
       "priority": "regular",
       "disabled": false,
-      "notes": "Claude Code CLI | IPv4 loopback (permits any local listener). Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; observed executable under /opt/homebrew/Caskroom/claude-code/2.1.323/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
+      "notes": "Claude Code CLI | IPv4 loopback (permits any local listener). Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; expected executable (2.1.325) under /opt/homebrew/Caskroom/claude-code/2.1.325/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
@@ -315,7 +315,7 @@
       "remote-addresses": "::1/128",
       "priority": "regular",
       "disabled": false,
-      "notes": "Claude Code CLI | IPv6 loopback only. Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; observed executable under /opt/homebrew/Caskroom/claude-code/2.1.323/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
+      "notes": "Claude Code CLI | IPv6 loopback only. Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; expected executable (2.1.325) under /opt/homebrew/Caskroom/claude-code/2.1.325/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claude-code",
@@ -324,7 +324,7 @@
       "remote": "any",
       "priority": "regular",
       "disabled": false,
-      "notes": "Claude Code CLI | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; observed executable under /opt/homebrew/Caskroom/claude-code/2.1.323/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
+      "notes": "Claude Code CLI | Fallback: deny all other outgoing IPv4 and IPv6 destinations. Observed identity: com.anthropic.claude-code (Q6L2SF6YDW). Example executable(s): Homebrew Claude Code CLI; expected executable (2.1.325) under /opt/homebrew/Caskroom/claude-code/2.1.325/claude. Code ID rule is independent of path. Confirm this rule is enabled after remote subscription."
     },
     {
       "process": "identifier.Q6L2SF6YDW/com.anthropic.claude.ios-sim",
@@ -876,13 +876,13 @@
       "notes": "Path fallback only for audited binary github-mcp-server. Exact path, version/relocation dependent; may include a signature identity check on import. Per-IP Code ID Allow takes precedence over this regular-priority Any Server Deny."
     },
     {
-      "process": "/opt/homebrew/Caskroom/claude-code/2.1.323/claude",
+      "process": "/opt/homebrew/Caskroom/claude-code/2.1.325/claude",
       "action": "deny",
       "direction": "outgoing",
       "remote": "any",
       "priority": "regular",
       "disabled": false,
-      "notes": "PATH FALLBACK, DENY ONLY — Claude Code CLI — Homebrew Cask executable (confirmed 2.1.323). Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claude-code. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
+      "notes": "PATH FALLBACK, DENY ONLY — Claude Code CLI — Homebrew Cask executable (version 2.1.325; verify path and signature on this Mac). Expected Team ID Q6L2SF6YDW; identifier com.anthropic.claude-code. Exact path, not a wildcard. Intended to deny all network if this path matches but its Code ID allow rules do not; if Code ID matches, the IP-range allow rules are more specific than Any Server. Confirm process identification / identity check in Little Snitch Inspector. If it checks the original signature, this path rule may also stop matching upon binary replacement. Upgrade may invalidate this path. Other unrelated process paths not covered."
     }
   ]
 }
